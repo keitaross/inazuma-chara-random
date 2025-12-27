@@ -9,20 +9,14 @@
 <script>
 (() => {
 
-  // ★ キャラIDの最大値（要調整）
+  // キャラID最大値（実在範囲に調整）
   const MAX_CHARA_ID = 300;
 
-  // ランダムID生成
+  // ランダムID
   const charaId = Math.floor(Math.random() * MAX_CHARA_ID) + 1;
 
-  // q パラメータ生成
-  const param = { chara_id: charaId };
-  const json = JSON.stringify(param);
-  const base64 = btoa(unescape(encodeURIComponent(json)));
-  const q = encodeURIComponent(base64);
-
-  // 遷移
-  location.href = `https://zukan.inazuma.jp/chara_param/?q=${q}`;
+  // 個別キャラページへ直接遷移
+  location.href = `https://zukan.inazuma.jp/chara/${charaId}/`;
 
 })();
 </script>
