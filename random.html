@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>イナズマ図鑑 ランダムキャラ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<script>
+(async () => {
+
+  const res = await fetch("https://zukan.inazuma.jp/chara_list/");
+  const html = await res.text();
+
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  const ids = [...doc.querySelectorAll('a[href^="/chara/"]')]
+    .map(a => a.getAttribute("href"))
+    .filter(h => /^\/chara\/\d+\/$/.test(h))
+    .map(h => Number(h.match(/\d+/)[0]));
+
+  if (ids.length === 0) {
+    alert("キャラクターが取得できませんでした");
+    return;
+  }
+
+  const charaId = ids[Math.floor(Math.random() * ids.length)];
+
+  const param = { chara_id: charaId };
+  const json = JSON.stringify(param);
+  const base64 = btoa(unescape(encodeURIComponent(json)));
+  const q = encodeURIComponent(base64);
+
+  location.href = `https://zukan.inazuma.jp/chara_param/?q=${q}`;
+
+})();
+</script>
+</body>
+</html>
