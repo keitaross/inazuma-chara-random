@@ -7,30 +7,21 @@
 </head>
 <body>
 <script>
-(async () => {
+(() => {
 
-  const res = await fetch("https://zukan.inazuma.jp/chara_list/");
-  const html = await res.text();
+  // ★ キャラIDの最大値（要調整）
+  const MAX_CHARA_ID = 300;
 
-  const doc = new DOMParser().parseFromString(html, "text/html");
+  // ランダムID生成
+  const charaId = Math.floor(Math.random() * MAX_CHARA_ID) + 1;
 
-  const ids = [...doc.querySelectorAll('a[href^="/chara/"]')]
-    .map(a => a.getAttribute("href"))
-    .filter(h => /^\/chara\/\d+\/$/.test(h))
-    .map(h => Number(h.match(/\d+/)[0]));
-
-  if (ids.length === 0) {
-    alert("キャラクターが取得できませんでした");
-    return;
-  }
-
-  const charaId = ids[Math.floor(Math.random() * ids.length)];
-
+  // q パラメータ生成
   const param = { chara_id: charaId };
   const json = JSON.stringify(param);
   const base64 = btoa(unescape(encodeURIComponent(json)));
   const q = encodeURIComponent(base64);
 
+  // 遷移
   location.href = `https://zukan.inazuma.jp/chara_param/?q=${q}`;
 
 })();
